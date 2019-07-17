@@ -43,7 +43,7 @@ The focus is on the web components comprising the interface to this API, collect
 Setup:
 ======
 
- 1. `git clone https://github.com/steve-rescale/code-review.git'
+ 1. `git clone https://github.com/steve-rescale/code-review.git`
  2. `cd code-review`
  3. `git checkout -b code-review --track origin/code-review`
  4. `npm install` - global deps
