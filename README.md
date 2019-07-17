@@ -43,10 +43,13 @@ The focus is on the web components comprising the interface to this API, collect
 Setup:
 ======
 
- 1. `npm install` - global deps
- 2. `npm run bootstrap` - package deps
- 3. `npm run build` or `npm run watch` - transpile packages
- 4. `npm start` - launch web server
+ 1. `git clone https://github.com/steve-rescale/code-review.git'
+ 2. `cd code-review`
+ 3. `git checkout -b code-review --track origin/code-review`
+ 4. `npm install` - global deps
+ 5. `npm run bootstrap` - package deps
+ 6. `npm run build` or `npm run watch` - transpile packages
+ 7. `npm start` - launch web server
 
  Visit `http://localhost:3000` in your browser.
 
