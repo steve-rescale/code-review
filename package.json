@@ -1,0 +1,20 @@
+{
+  "name": "rescale-front-end-code-review",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "lerna run build",
+    "watch": "lerna run --parallel watch",
+    "test": "lerna run test",
+    "bootstrap": "lerna bootstrap",
+    "start": "cd packages/server && npm start"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^12.6.2",
+    "lerna": "^3.15.0",
+    "typescript": "^3.5.3"
+  }
+}
