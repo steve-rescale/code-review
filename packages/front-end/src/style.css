@@ -1,0 +1,11 @@
+* {
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+ul {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+}
+li {
+  grid-column: span 4;
+}
