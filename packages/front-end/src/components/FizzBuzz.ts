@@ -10,9 +10,6 @@ class FizzBuzz extends HTMLElement {
   // initialize component-scoped `document`-like object
   private root = this.attachShadow({ mode: 'closed' });
 
-  // list of attributes with reactive behavior
-  // our attributes are like props from react in that they may be passed in through the markup specifying the component,
-  // but they're also like state in that we are allowed to modify them ourselves
   static get observedAttributes(): string[] {
     return ['count'];
   }
@@ -29,7 +26,6 @@ class FizzBuzz extends HTMLElement {
     this.render();
   }
 
-  // `componentWillReceiveProps`
   attributeChangedCallback(
     attr: 'count',
     oldValue?: string,
@@ -40,7 +36,7 @@ class FizzBuzz extends HTMLElement {
     }
   }
 
-  render(num?: number): void {
+  render(): void {
     render(html`
       <style>${style}</style>
       <label>Count:
@@ -76,7 +72,8 @@ class FizzBuzz extends HTMLElement {
    */
   private async callApi(num: number): Promise<{ results: string[] }> {
     return (await fetch(
-      'http://' + location.host + '/api/v1/fizz-buzz?start=' + num.toString() + '&end=' + num.toString() + '&rules=' + JSON.stringify(this.rules)
+      'http://' + location.host + '/api/v1/fizz-buzz?start=' + num.toString() + '&end=' + num.toString() +
+        '&rules=' + JSON.stringify(this.rules)
     )).json();
   }
 }
