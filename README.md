@@ -48,10 +48,18 @@ Setup:
  3. `git checkout -b code-review --track origin/code-review`
  4. `npm install` - global deps
  5. `npm run bootstrap` - package deps
- 6. `npm run build` or `npm run watch` - transpile packages
- 7. `npm start` - launch web server
+ 6. `npm run watch` - transpile packages
+ 7. (in another terminal) `npm start` - launch web server
 
  Visit `http://localhost:3000` in your browser.
+
+
+Layout
+======
+
+We're primarily concerned with the files in `packages/front-end/src`.
+
+These are TypeScript files, but the types are just informational. You don't have to look for problems with them.
 
 
 Native Web Components
@@ -75,23 +83,23 @@ Then, elsewhere:
 
 The interface for `HTMLElement` is relatively simple:
 
-## `connectedCallback()`
+### `connectedCallback()`
 
 Called when the element is stamped into the DOM.
 
-## `static get observedAttributes()`
+### `static get observedAttributes()`
 
 This returns a `[ 'list', 'of', 'attribute', 'names' ]` that the component is interested in observing. Attributes have similarities to both `props` and `state` in React. They're being used like `props` here, passing data into components through HTML.
 
 Attributes that are observed call:
 
-## `attributeChangedCallback(attributeName, oldValue, newValue)`
+### `attributeChangedCallback(attributeName, oldValue, newValue)`
 
 Here you respond to the data by whatever means necessary. Usually this involves doing some manipulation of the DOM inside the component, so you can think of it as also being the `render` method.
 
 Having not included a templating libary here, DOM manipulation is done the "old fashioned" way: `cloneNode`-ing elements, `createElement`/`appendChild` to build up a list, all that fun stuff from back even before we even had jQuery.
 
-## `dispatchEvent(event)`
+### `dispatchEvent(event)`
 
 In the absence here of a central store, data is exchanged "props down, events up".
 
