@@ -30,12 +30,12 @@ Buzz
 
 This repo has this implemented in the form of an API endpoint. It takes `begin` and `end` parameters and returns JSON describing the labels for each number from `begin`-`end` inclusive.
 
-Due to feature creep, the API can now also accept different rules for how to label divisible numbers. The prototypical scheme described above is coded as `[[3, 'Fizz'], [5, 'Buzz']]`, but you could supply any number of `[integer, string]` tuples to label the list accordingly.
+The API also accepts different rules for how to label divisible numbers. The classic scheme described above is coded as `[[3, 'Fizz'], [5, 'Buzz']]`, but you could supply any number of `[integer, string]` tuples to label the list accordingly.
 
 You can assume that this API works well enough, though you are welcome to take a look and critique it.
 
 
-The focus is on the web components comprising the interface to this API, collecting the pertinent parameters and displaying the output. It sorta works, but has some rough edges to consider code-wise, and ...debatable stylistic presentation.
+The aim here is to debug the new web components comprising the front-end to this API.
 
 ![in action](fizzbuzz.gif)
 
@@ -54,12 +54,12 @@ Setup:
  Visit `http://localhost:3000` in your browser.
 
 
-Native Webcomponents
+Native Web Components
 ====================
 
-These components are built with the web components spec implemented in Chrome. It's similar to other reactive binding frameworks like React, Vue, Polymer, etc, but with a more minimal API.
+The components here use the W3C web components API, which is similar to reactive binding frameworks like React, Vue, Polymer, etc.
 
-Native components extend `HTMLElement` to add new tags the HTML vernacular:
+These are objects that extend from `HTMLElement`, which can be assigned tag names to use in markup:
 
 ```javascript
 class MyCustomButton extends HTMLElement {...}
@@ -73,44 +73,29 @@ Then, elsewhere:
 </form>
 ```
 
-The component behavior is implemented by defining some lifecycle events in the class:
+The interface for `HTMLElement` is relatively simple:
 
-## Lifecycle
+## `connectedCallback()`
 
-### `constructor()`
+Called when the element is stamped into the DOM.
 
-This is like `componentDidMount`, or `jQuery.ready`, signaling that you can start changing the document. The document in this case is a "shadow root", which has all the same properties as the global `document` object but which is encapsulated to the scope of your component. Each component is essentially its own little web page. Or think of it like `chroot` for the DOM.
+## `static get observedAttributes()`
 
-Here, in `constructor` we load `template.html` into the document, then use the familiar `getElementById`/`querySelector` DOM methods to save references to elements we need to update in response to state changes. This is also a good place to `addEventListeners` to template elements which are interactive.
+This returns a `[ 'list', 'of', 'attribute', 'names' ]` that the component is interested in observing. Attributes have similarities to both `props` and `state` in React. They're being used like `props` here, passing data into components through HTML.
 
-### `static get observedAttributes()`
+Attributes that are observed call:
 
-This returns a `[ 'list', 'of', 'attribute', 'names' ]` that the component is interested in observing. This is similar to your list of `props` in React. Attributes are defined directly in the HTML template as above or programmatically with `setAttribute`. The observed list ties directly to:
-
-### `attributeChangedCallback(attributeName, oldValue, newValue)`
-
-This is like `componentWillReceiveProps`, except that it's called once with each changed attribute rather than with a collection of them all.
+## `attributeChangedCallback(attributeName, oldValue, newValue)`
 
 Here you respond to the data by whatever means necessary. Usually this involves doing some manipulation of the DOM inside the component, so you can think of it as also being the `render` method.
 
 Having not included a templating libary here, DOM manipulation is done the "old fashioned" way: `cloneNode`-ing elements, `createElement`/`appendChild` to build up a list, all that fun stuff from back even before we even had jQuery.
 
+## `dispatchEvent(event)`
 
-## Events
+In the absence here of a central store, data is exchanged "props down, events up".
 
-Data flow is "attributes down, events up".
-
-Just like a plain `<input>` emits `change`, `keypress`, `click`, etc, components can emit `CustomEvent`s with an arbitrary payload describing state changes. This happens once here, when the rule set component `change`s, with the outer component listening to update its list accordingly.
-
-
-
-Layout
-======
-
-`packages/front-end/src` and `packages/server/src` contain the relevant code. `lib/` in each package holds compiled code.
-
-The `src/` files are TypeScript, but the type annotations are intended to be good enough as-written. You can use them as cues about data flow or ignore them.
-
+Components can assign their children properties, and if child components need to communicate back up the tree, they can emit an event with that data. Any interested parties upstream can `addEventListener` to subscribe.
 
 
 Questions
