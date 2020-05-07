@@ -54,7 +54,6 @@ Setup:
 
  If you have a conflict on port 3000, re-run with `NODE_PORT=3030 npm start` (or whatever other port number).
 
-
 Layout
 ======
 
@@ -96,11 +95,15 @@ Attributes that are observed call:
 
 ## `attributeChangedCallback(attributeName, oldValue, newValue)`
 
-Here you respond to the data by whatever means necessary, usually by re-rendering some or all of the component HTML.
+Here you respond to the data by whatever means necessary. Usually this involves doing some manipulation of the DOM inside the component, so you can think of it as also being the `render` method.
+
+Having not included a templating libary here, DOM manipulation is done the "old fashioned" way: `cloneNode`-ing elements, `createElement`/`appendChild` to build up a list, all that fun stuff from back even before we even had jQuery.
 
 ## `dispatchEvent(event)`
 
-In the absence here of a central store, data is exchanged "props down, events up". Components can assign their children properties, and if child components need to communicate back up the tree, they can emit an event with that data. Any interested parties upstream can `addEventListener` to subscribe.
+In the absence here of a central store, data is exchanged "props down, events up".
+
+Components can assign their children properties, and if child components need to communicate back up the tree, they can emit an event with that data. Any interested parties upstream can `addEventListener` to subscribe.
 
 
 Questions
