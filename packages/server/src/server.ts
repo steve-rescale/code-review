@@ -25,7 +25,7 @@ app.get('/api/v1/fizz-buzz', (req, res) => {
     bounds.end = tmp;
   }
   if (bounds.end - bounds.start > 1000) {
-    return res.status(400).json({ error: 'list length > 1000' });
+    return badRequest('list length > 1000');
   }
 
   const strategy: FizzBuzzFactorLabel[] = [];
@@ -36,7 +36,13 @@ app.get('/api/v1/fizz-buzz', (req, res) => {
         throw new Error('non-array rule set');
       }
       rules.forEach((rule: unknown, idx: number) => {
-        if (!Array.isArray(rule) || rule.length !== 2 || typeof rule[0] !== 'number' || typeof rule[1] !== 'string' || parseInt(rule[0], 10) !== rule[0]) {
+        if (
+          !Array.isArray(rule) ||
+          rule.length !== 2 ||
+          typeof rule[0] !== 'number' ||
+          typeof rule[1] !== 'string' ||
+          parseInt(rule[0], 10) !== rule[0]
+        ) {
           throw new Error(`invalid term in rule #${ idx }`);
         }
         strategy.push(rule as FizzBuzzFactorLabel);
@@ -44,7 +50,7 @@ app.get('/api/v1/fizz-buzz', (req, res) => {
     }
     catch (ex) {
       console.error(ex);
-      return badRequest('invalid rule set');
+      return badRequest(ex.message);
     }
   }
   else {
