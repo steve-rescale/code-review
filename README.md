@@ -97,7 +97,7 @@ Attributes that are observed call:
 
 Here you respond to the data by whatever means necessary. Usually this involves doing some manipulation of the DOM inside the component, so you can think of it as also being the `render` method.
 
-Having not included a templating libary here, DOM manipulation is done the "old fashioned" way: `cloneNode`-ing elements, `createElement`/`appendChild` to build up a list, all that fun stuff from back even before we even had jQuery.
+The template library `lit-html` is used here, which is broadly similar to JSX except using tagged templates.
 
 ### `dispatchEvent(event)`
 
