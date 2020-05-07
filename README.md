@@ -32,7 +32,7 @@ This repo has this implemented in the form of an API endpoint. It takes `begin` 
 
 The API also accepts different rules for how to label divisible numbers. The classic scheme described above is coded as `[[3, 'Fizz'], [5, 'Buzz']]`, but you could supply any number of `[integer, string]` tuples to label the list accordingly.
 
-You can assume that this API works well enough, though you are welcome to take a look at it.
+You can assume that this API works well enough, though you are welcome to take a look and critique it.
 
 
 The aim here is to debug the new web components comprising the front-end to this API.
@@ -46,13 +46,13 @@ Setup:
  1. `git clone https://github.com/steve-rescale/code-review.git`
  2. `cd code-review`
  3. `git checkout -b code-review --track origin/code-review`
- 4. `npm install`
- 5. `npm run watch`
- 6. (in another terminal) `npm start`
+ 4. `npm install` - global deps
+ 5. `npm run bootstrap` - package deps
+ 6. `npm run watch` - transpile packages
+ 7. (in another terminal) `npm start` - launch web server
 
  Visit `http://localhost:3000` in your browser.
 
- If you have a conflict on port 3000, re-run with `NODE_PORT=3030 npm start` (or whatever other port number).
 
 Layout
 ======
@@ -83,23 +83,23 @@ Then, elsewhere:
 
 The interface for `HTMLElement` is relatively simple:
 
-## `connectedCallback()`
+### `connectedCallback()`
 
 Called when the element is stamped into the DOM.
 
-## `static get observedAttributes()`
+### `static get observedAttributes()`
 
 This returns a `[ 'list', 'of', 'attribute', 'names' ]` that the component is interested in observing. Attributes have similarities to both `props` and `state` in React. They're being used like `props` here, passing data into components through HTML.
 
 Attributes that are observed call:
 
-## `attributeChangedCallback(attributeName, oldValue, newValue)`
+### `attributeChangedCallback(attributeName, oldValue, newValue)`
 
 Here you respond to the data by whatever means necessary. Usually this involves doing some manipulation of the DOM inside the component, so you can think of it as also being the `render` method.
 
 Having not included a templating libary here, DOM manipulation is done the "old fashioned" way: `cloneNode`-ing elements, `createElement`/`appendChild` to build up a list, all that fun stuff from back even before we even had jQuery.
 
-## `dispatchEvent(event)`
+### `dispatchEvent(event)`
 
 In the absence here of a central store, data is exchanged "props down, events up".
 
