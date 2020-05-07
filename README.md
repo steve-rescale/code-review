@@ -30,12 +30,12 @@ Buzz
 
 This repo has this implemented in the form of an API endpoint. It takes `begin` and `end` parameters and returns JSON describing the labels for each number from `begin`-`end` inclusive.
 
-Due to feature creep, the API can now also accept different rules for how to label divisible numbers. The prototypical scheme described above is coded as `[[3, 'Fizz'], [5, 'Buzz']]`, but you could supply any number of `[integer, string]` tuples to label the list accordingly.
+The API also accepts different rules for how to label divisible numbers. The classic scheme described above is coded as `[[3, 'Fizz'], [5, 'Buzz']]`, but you could supply any number of `[integer, string]` tuples to label the list accordingly.
 
 You can assume that this API works well enough, though you are welcome to take a look at it.
 
 
-The focus is on the web components comprising the interface to this API, collecting the pertinent parameters and displaying the output. It sorta works, but has some rough edges to consider code-wise, and ...debatable stylistic presentation.
+The aim here is to debug the new web components comprising the front-end to this API.
 
 ![in action](fizzbuzz.gif)
 
@@ -63,12 +63,12 @@ We're primarily concerned with the files in `packages/front-end/src`.
 These are TypeScript files, but the types are just informational. You don't have to look for problems with them.
 
 
-Native Webcomponents
+Native Web Components
 ====================
 
-These components are built with the web components spec implemented in Chrome. It's similar to other reactive binding frameworks like React, Vue, Polymer, etc, but with a more minimal API.
+The components here use the W3C web components API, which is similar to reactive binding frameworks like React, Vue, Polymer, etc.
 
-Native components extend `HTMLElement` to add new tags the HTML vernacular:
+These are objects that extend from `HTMLElement`, which can be assigned tag names to use in markup:
 
 ```javascript
 class MyCustomButton extends HTMLElement {...}
@@ -82,34 +82,25 @@ Then, elsewhere:
 </form>
 ```
 
-The component behavior is implemented by defining some lifecycle events in the class:
+The interface for `HTMLElement` is relatively simple:
 
-## Lifecycle
+## `connectedCallback()`
 
-### `connectedCallback()`
+Called when the element is stamped into the DOM.
 
-Means the component has been stamped into the DOM, similar to React's `componentDidMount`
+## `static get observedAttributes()`
 
-### `static get observedAttributes()`
+This returns a `[ 'list', 'of', 'attribute', 'names' ]` that the component is interested in observing. Attributes have similarities to both `props` and `state` in React. They're being used like `props` here, passing data into components through HTML.
 
-This returns a `[ 'list', 'of', 'attribute', 'names' ]` that the component is interested in observing. This is similar to your list of `props` in React. Unlike React props, they can be modified by the component itself (`setAttribute`).
+Attributes that are observed call:
 
-The observed list ties directly to:
-
-### `attributeChangedCallback(attributeName, oldValue, newValue)`
-
-`componentWillReceiveProps`, except that it's called once with each changed.
+## `attributeChangedCallback(attributeName, oldValue, newValue)`
 
 Here you respond to the data by whatever means necessary, usually by re-rendering some or all of the component HTML.
 
+## `dispatchEvent(event)`
 
-## Events
-
-Data flow is "attributes down, events up".
-
-Just like a plain `<input>` emits `change`, `keypress`, `click`, etc, components can emit `CustomEvent`s describing their state changes.
-
-This happens once here, when the rule set component `change`s, with the outer component listening updates its list accordingly.
+In the absence here of a central store, data is exchanged "props down, events up". Components can assign their children properties, and if child components need to communicate back up the tree, they can emit an event with that data. Any interested parties upstream can `addEventListener` to subscribe.
 
 
 Questions
